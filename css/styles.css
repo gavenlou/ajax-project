@@ -60,3 +60,9 @@
 .back {
   font-size: 1.4rem;
 }
+
+.smallText {
+  font-size: 1rem;
+  text-align: right;
+  margin-right: 10px;
+}
