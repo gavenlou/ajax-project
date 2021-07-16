@@ -1,0 +1,62 @@
+.container {
+  width: 1460px;
+  margin: auto;
+}
+
+.navbar {
+  font-family: 'Raleway', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffe194;
+  border: 2px solid black;
+}
+
+.navOptions {
+  display: flex;
+  align-items: center;
+}
+
+.navMain {
+  margin-left: 20px;
+}
+
+.options {
+  margin: 0 20px;
+}
+
+.flashcard {
+  text-align: center;
+  width: 500px;
+  margin: auto;
+  margin-top: 100px;
+  padding: 20px 0;
+  font-size: 2rem;
+  background-color: #e8f6ef;
+}
+
+.inputBox {
+  padding: 10px 0;
+  text-align: center;
+  margin: auto;
+  font-size: 2rem;
+}
+
+.input {
+  background-color: #e8f6ef;
+  width: 500px;
+  height: 45px;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  margin: auto;
+  width: 500px;
+  justify-content: space-between;
+}
+
+.next,
+.back {
+  font-size: 1.4rem;
+}
