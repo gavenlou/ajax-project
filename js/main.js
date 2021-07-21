@@ -1,8 +1,10 @@
 var $currentWord = document.querySelector('#word');
 var $guess = document.querySelector('#input');
+var $answer = document.querySelector('.answer');
 var randomWord = '';
 var transWord = '';
 var englishWord = [];
+var wordList = '';
 
 function getWord(word) {
   const xhr = new XMLHttpRequest();
@@ -10,7 +12,7 @@ function getWord(word) {
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     randomWord = xhr.response.body.Word;
-    $currentWord.textContent = `${randomWord}`;
+    $currentWord.textContent = randomWord.charAt(0).toUpperCase() + randomWord.slice(1);
     translateWord();
   });
   xhr.send();
@@ -34,7 +36,9 @@ function translateWord(word) {
       var response = JSON.parse((xhr.response));
       var matches = [];
       for (const match of response.matches) {
-        matches.push(match.translation);
+        var translation = match.translation.toLowerCase();
+        var uppercase = translation.charAt(0).toUpperCase() + translation.slice(1);
+        matches.push(uppercase);
       }
       englishWord.push(matches);
     }
@@ -57,7 +61,15 @@ $guess.addEventListener('keydown', function (e) {
       } else {
         $guess.className = 'input incorrect';
         $guess.blur();
+        $answer.className = 'answer';
       }
     }
   }
+});
+
+$answer.addEventListener('click', function () {
+  for (var list of englishWord[0]) {
+    wordList += `${list}, `;
+  }
+  $currentWord.textContent = `${randomWord}- ${wordList}`;
 });

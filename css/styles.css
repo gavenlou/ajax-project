@@ -52,7 +52,8 @@
 }
 
 .next,
-.back {
+.back,
+.answer {
   font-size: 1.4rem;
 }
 
@@ -70,4 +71,8 @@
 .incorrect {
   border-color: red;
   color: red;
+}
+
+.hidden {
+  display: none;
 }
