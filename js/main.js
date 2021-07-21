@@ -71,5 +71,6 @@ $answer.addEventListener('click', function () {
   for (var list of englishWord[0]) {
     wordList += `${list}, `;
   }
+  wordList = wordList.slice(0, wordList.length - 2);
   $currentWord.textContent = `${randomWord}- ${wordList}`;
 });
