@@ -47,7 +47,7 @@ function translateWord(word) {
   });
 
   xhr.open('GET', 'https://translated-mymemory---translation-memory.p.rapidapi.com/api/get?q=' + transWord + '&langpair=es%7Cen&de=a%40b.c&onlyprivate=0&mt=1');
-  xhr.setRequestHeader('x-rapidapi-key', '981a3979c5msh9f4609ea4912885p1769d3jsnb9b71d996d55');
+  xhr.setRequestHeader('x-rapidapi-key', 'API_KEY');
   xhr.setRequestHeader('x-rapidapi-host', 'translated-mymemory---translation-memory.p.rapidapi.com');
 
   xhr.send(data);
