@@ -61,3 +61,13 @@
   text-align: right;
   margin-right: 10px;
 }
+
+.correct {
+  border-color: green;
+  color: green;
+}
+
+.incorrect {
+  border-color: red;
+  color: red;
+}

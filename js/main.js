@@ -1,5 +1,4 @@
 var $currentWord = document.querySelector('#word');
-// eslint-disable-next-line no-unused-vars
 var $guess = document.querySelector('#input');
 var randomWord = '';
 var transWord = '';
@@ -20,7 +19,6 @@ function getWord(word) {
 
 getWord();
 
-// eslint-disable-next-line no-unused-vars
 function translateWord(word) {
   const data = null;
 
@@ -35,7 +33,7 @@ function translateWord(word) {
     if (this.readyState === this.DONE) {
       var response = JSON.parse((xhr.response));
       var matches = [];
-      for (var match of response.matches) {
+      for (const match of response.matches) {
         matches.push(match.translation);
       }
       englishWord.push(matches);
@@ -48,3 +46,18 @@ function translateWord(word) {
 
   xhr.send(data);
 }
+
+$guess.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    for (const match of englishWord[0]) {
+      if ($guess.value === match) {
+        $guess.className = 'input correct';
+        $guess.blur();
+        break;
+      } else {
+        $guess.className = 'input incorrect';
+        $guess.blur();
+      }
+    }
+  }
+});
