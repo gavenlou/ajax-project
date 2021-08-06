@@ -76,3 +76,13 @@
 .hidden {
   display: none;
 }
+
+#def:hover {
+  text-decoration: underline;
+}
+
+#def:hover,
+button:hover,
+.options:hover {
+  cursor: pointer;
+}
