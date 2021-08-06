@@ -1,9 +1,11 @@
 var $currentWord = document.querySelector('#word');
 var $guess = document.querySelector('#input');
 var $answer = document.querySelector('.answer');
+var $def = document.querySelector('#def');
 var randomWord = '';
 var upperRandom = '';
 var transWord = '';
+var translation = [];
 var englishWord = [];
 var wordList = '';
 
@@ -38,7 +40,7 @@ function translateWord(word) {
       var response = JSON.parse((xhr.response));
       var matches = [];
       for (const match of response.matches) {
-        var translation = match.translation.toLowerCase();
+        translation = match.translation.toLowerCase();
         var uppercase = translation.charAt(0).toUpperCase() + translation.slice(1);
         matches.push(uppercase);
       }
@@ -47,7 +49,8 @@ function translateWord(word) {
   });
 
   xhr.open('GET', 'https://translated-mymemory---translation-memory.p.rapidapi.com/api/get?q=' + transWord + '&langpair=es%7Cen&de=a%40b.c&onlyprivate=0&mt=1');
-  xhr.setRequestHeader('x-rapidapi-key', 'API_KEY');
+  // eslint-disable-next-line no-undef
+  xhr.setRequestHeader('x-rapidapi-key', API_KEY);
   xhr.setRequestHeader('x-rapidapi-host', 'translated-mymemory---translation-memory.p.rapidapi.com');
 
   xhr.send(data);
@@ -75,4 +78,19 @@ $answer.addEventListener('click', function () {
   }
   wordList = wordList.slice(0, wordList.length - 2);
   $currentWord.textContent = `${upperRandom}- ${wordList}`;
+});
+
+$def.addEventListener('click', () => {
+  if ($currentWord.textContent === upperRandom) {
+    for (const list of englishWord[0]) {
+      wordList += `${list}, `;
+    }
+    wordList = wordList.slice(0, wordList.length - 2);
+    $currentWord.textContent = `${wordList}`;
+    $def.textContent = 'Word';
+  } else {
+    wordList = '';
+    $currentWord.textContent = upperRandom;
+    $def.textContent = 'Definition';
+  }
 });
