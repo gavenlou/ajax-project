@@ -86,3 +86,17 @@ button:hover,
 .options:hover {
   cursor: pointer;
 }
+
+.pastTable,
+th {
+  border: 2px solid black;
+  border-collapse: collapse;
+  padding: 5px;
+}
+
+.past {
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

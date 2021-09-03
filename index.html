@@ -26,26 +26,41 @@
   </header>
   <main>
 
-      <div class="flashcard">
-        <div class="flashText">
-          <p id="word" class="flashWord">Word</p>
-          <p id="def" class="smallText">Definition</p>
-        </div>
+      <div class="past">
+        <table class="pastTable">
+          <tr>
+            <th>Hi</th>
+            <th>Test</th>
+          </tr>
+          <tr>
+            <th>Past</th>
+            <th>A time which has past</th>
+          </tr>
+        </table>
       </div>
 
-      <div class="inputBox">
-        <input id="input" class="input">
-      </div>
-      <div class="buttons">
-        <button class="back">
-          Back
-        </button>
-        <button class="answer hidden">
-          Show Answer
-        </button>
-        <button class="next">
-          Next
-        </button>
+      <div class="flashContainer">
+        <div class="flashcard">
+          <div class="flashText">
+            <p id="word" class="flashWord">Word</p>
+            <p class="smallText"><span id="def">Definition</span></p>
+          </div>
+        </div>
+
+        <div class="inputBox">
+          <input id="input" class="input">
+        </div>
+        <div class="buttons">
+          <button class="back">
+            Back
+          </button>
+          <button class="answer hidden">
+            Show Answer
+          </button>
+          <button class="next" onclick="getWord()">
+            Next
+          </button>
+        </div>
       </div>
 
   </main>
