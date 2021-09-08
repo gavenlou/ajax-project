@@ -1,15 +1,17 @@
 /* exported data */
 let data = {
   view: '',
-  pastId: 0,
-  pastWords: []
+  pastId: 1,
+  myID: 0,
+  pastWords: [],
+  myWords: []
 };
 
-var previousData = localStorage.getItem('javascript-local-storage');
+var previousData = localStorage.getItem('ajax-local-storage');
 if (previousData !== null) {
   data = JSON.parse(previousData);
 }
 
 window.addEventListener('beforeunload', function () {
-  localStorage.setItem('javascript-local-storage', JSON.stringify(data));
+  localStorage.setItem('ajax-local-storage', JSON.stringify(data));
 });
