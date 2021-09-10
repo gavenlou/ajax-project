@@ -7,23 +7,23 @@ const $next = document.querySelector('.next');
 const $table = document.querySelector('.pastTable');
 let randomWord = '';
 let search = '';
-let translation = [];
+const translation = [];
 let definition = '';
-let englishWord = [];
-let wordList = '';
+let spanishWord = '';
+const wordList = '';
 const pastCount = data.pastId - 1;
 
 function getWord(word) {
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://palabras-aleatorias-public-api.herokuapp.com/random');
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://random-word-api.herokuapp.com/word?number=1');
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
-    randomWord = xhr.response.body.Word;
-    $currentWord.textContent = capitalize(randomWord);
+    const response = xhr.response;
+    randomWord = xhr.response[0];
     translateWord();
+    getDef(randomWord);
   });
   xhr.send();
-
 }
 
 getWord();
@@ -40,19 +40,13 @@ function translateWord(word) {
 
   xhr.addEventListener('readystatechange', function () {
     if (this.readyState === this.DONE) {
-      var response = JSON.parse((xhr.response));
-      var matches = [];
-      englishWord = [];
-      for (const match of response.matches) {
-        translation = match.translation.toLowerCase();
-        matches.push(capitalize(translation));
-      }
-      englishWord.push(matches);
-      getDef(englishWord[0][0]);
+      const response = JSON.parse((xhr.response));
+      spanishWord = response.responseData.translatedText;
+      $currentWord.textContent = capitalize(spanishWord);
     }
   });
 
-  xhr.open('GET', 'https://translated-mymemory---translation-memory.p.rapidapi.com/api/get?q=' + search + '&langpair=es%7Cen&de=a%40b.c&onlyprivate=0&mt=1');
+  xhr.open('GET', 'https://translated-mymemory---translation-memory.p.rapidapi.com/api/get?q=' + search + '&langpair=en%7Ces&de=a%40b.c&onlyprivate=0&mt=1');
   // eslint-disable-next-line no-undef
   xhr.setRequestHeader('x-rapidapi-key', API_KEY);
   xhr.setRequestHeader('x-rapidapi-host', 'translated-mymemory---translation-memory.p.rapidapi.com');
@@ -61,63 +55,50 @@ function translateWord(word) {
 }
 
 const getDef = word => {
-  const data = null;
 
   const xhr = new XMLHttpRequest();
-  xhr.withCredentials = true;
 
   xhr.addEventListener('readystatechange', function () {
     if (this.readyState === this.DONE) {
       const response = JSON.parse(xhr.response);
-      console.log(response);
-      definition = response.definitions;
+      try {
+        definition = response[0].meanings[0].definitions[0].definition;
+      } catch (err) {
+        getWord();
+      }
       console.log(definition);
     }
   });
 
-  xhr.open('GET', 'https://wordsapiv1.p.rapidapi.com/words/' + word + '/definitions');
-  xhr.setRequestHeader('x-rapidapi-host', 'wordsapiv1.p.rapidapi.com');
-  // eslint-disable-next-line no-undef
-  xhr.setRequestHeader('x-rapidapi-key', API_KEY);
+  xhr.open('GET', 'https://api.dictionaryapi.dev/api/v2/entries/en/' + word);
 
   xhr.send(data);
 };
 
 $guess.addEventListener('keydown', function (e) {
   if (e.key === 'Enter') {
-    for (const match of englishWord[0]) {
-      if ($guess.value.toLowerCase() === match.toLowerCase()) {
-        $guess.className = 'input correct';
-        $guess.blur();
-        break;
-      } else {
-        $guess.className = 'input incorrect';
-        $guess.blur();
-        $answer.className = 'answer';
-      }
+    if ($guess.value.toLowerCase() === randomWord.toLowerCase()) {
+      $guess.className = 'input correct';
+      $guess.blur();
+    } else {
+      $guess.className = 'input incorrect';
+      $guess.blur();
+      $answer.className = 'answer';
     }
   }
 });
 
 $answer.addEventListener('click', function () {
-  wordList = '';
-  for (const list of englishWord[0]) {
-    wordList += `${list}, `;
-  }
-  wordList = wordList.slice(0, wordList.length - 2);
-  $currentWord.textContent = `${capitalize(randomWord)}- ${wordList}`;
+  $currentWord.textContent = `${capitalize(spanishWord)}- ${capitalize(randomWord)}`;
 });
 
 const viewDef = () => {
   if ($def.textContent === 'Definition') {
-    wordList = '';
-    wordList += `${definition[0].definition}`;
-    wordList = wordList.slice(0, wordList.length - 2);
-    $currentWord.textContent = `${wordList}`;
+
+    $currentWord.textContent = `${definition}`;
     $def.textContent = 'Word';
   } else {
-    wordList = '';
-    $currentWord.textContent = capitalize(randomWord);
+    $currentWord.textContent = capitalize(spanishWord);
     $def.textContent = 'Definition';
   }
 };
@@ -127,6 +108,7 @@ $def.addEventListener('click', () => {
 });
 
 const capitalize = word => {
+  word = word.toLowerCase();
   const result = word.charAt(0).toUpperCase() + word.slice(1);
   return result;
 };
@@ -149,26 +131,31 @@ const pastWords = word => {
 
 const next = () => {
   if (pastCount !== data.pastId) {
-    $currentWord.textContent = data.pastWords[pastCount].esWord;
+    spanishWord = data.pastWords[pastCount].esWord;
+    $currentWord.textContent = spanishWord;
+    $guess.textContent = '';
+    $guess.className = 'input';
     definition = data.pastWords[pastCount].def;
-  }
-  const word = {
-    enWord: englishWord[0],
-    esWord: randomWord,
-    def: definition[0].definition,
-    Id: data.pastId
-  };
-  if (data.pastId < 30) {
-    data.pastWords.push(word);
-    data.pastId++;
-    getWord();
+    randomWord = data.pastWords[pastCount].enWord;
   } else {
-    data.pastWords.shift();
-    for (let i = 0; i < data.pastWords.length; i++) {
-      data.pastWords[i].Id--;
+    const word = {
+      enWord: randomWord,
+      esWord: spanishWord,
+      def: definition[0].definition,
+      Id: data.pastId
+    };
+    if (data.pastId < 30) {
+      data.pastWords.push(word);
+      data.pastId++;
+      getWord();
+    } else {
+      data.pastWords.shift();
+      for (let i = 0; i < data.pastWords.length; i++) {
+        data.pastWords[i].Id--;
+      }
+      data.pastWords.push(word);
+      getWord();
     }
-    data.pastWords.push(word);
-    getWord();
   }
 };
 
